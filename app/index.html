@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WikiSpeedrun | La Course au Savoir</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="https://cdn.socket.io/4.8.1/socket.io.min.js" integrity="sha384-mkQ3/7FUtcGyoppY6bz/PORYoGqOl7/aSUMn2ymDOJcapfS6PHqxhRTMh1RR0Q6+" crossorigin="anonymous"></script>
+    <script src="assets/js/app.js"></script>
+</head>
+
+<body>
+    <div id="join-modal" class="modal-overlay">
+        <div class="modal-card">
+            <h2>Rejoindre une partie !</h2>
+            <p>et zé parti.</p>
+
+            <div id="errorModal"></div>
+
+            <div class="input-group">
+                <input type="text" id="username" placeholder="Pseudo (ex: WikiRunner)" autocomplete="off">
+            </div>
+
+            <div class="input-group">
+                <input type="text" id="room-code" placeholder="Code de la salle (Optionnel)">
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="submitModal('create')">Créer une partie</button>
+                <button class="btn btn-primary" onclick="submitModal('join')">Rejoindre</button>
+            </div>
+        </div>
+    </div>
+    <aside class="sidebar">
+        <div class="logo">
+            <h1>WikipediaGame</h1>
+            <p id="room">#NEGA</p>
+        </div>
+
+        <div class="target-box">
+            <span>Objectif :</span>
+            <strong id="target-page">Physique Quantique</strong>
+        </div>
+
+        <div class="leaderboard">
+            <h3>Joueurs</h3>
+            <div class="playerContainer">
+                <div class="playerCard">
+                    <span class="playerName">Alice</span>
+                    <span class="playerTime">clicks : 12</span>
+                </div>
+                <div class="playerCard">
+                    <span class="playerName">sparkiZ3</span>
+                    <span class="playerTime">clicks : 12</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="timer">02:45</div>
+    </aside>
+
+    <main class="game-container">
+        <header class="game-header">
+            <div class="breadcrumb">Départ : Albert Einstein > ... > Page Actuelle</div>
+        </header>
+
+        <div class="wiki-viewport">
+            <iframe src="https://fr.m.wikipedia.org/wiki/Special:Random" frameborder="0"></iframe>
+        </div>
+    </main>
+
+</body>
+
+</html>

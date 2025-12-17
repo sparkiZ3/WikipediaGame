@@ -1,0 +1,198 @@
+:root {
+    --bg-dark: #1a1a1a;
+    --sidebar-w: 280px;
+    --accent: #007bff;
+    --text-light: #f4f4f4;
+}
+
+body {
+    margin: 0;
+    display: flex;
+    height: 100vh;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-light);
+    overflow: hidden;
+}
+
+/* Overlay plein écran */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7); /* Fond sombre transparent */
+    backdrop-filter: blur(8px);    /* Flou d'arrière-plan */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;                /* S'assure qu'il est au-dessus de tout */
+}
+.modal-overlay .error {
+    background: #ff4d4d;
+    color: white;
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+/* Carte du Pop-up */
+.modal-card {
+    background: #252525;
+    padding: 40px;
+    border-radius: 15px;
+    width: 400px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    border: 1px solid #333;
+}
+
+.modal-card h2 {
+    margin-top: 0;
+    color: var(--accent);
+}
+
+.modal-card p {
+    color: #aaa;
+    margin-bottom: 25px;
+}
+
+/* Formulaire */
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #444;
+    background: #1a1a1a;
+    color: white;
+    box-sizing: border-box; /* Évite que l'input dépasse */
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+/* Boutons */
+.modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.btn {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+.btn-primary {
+    background: var(--accent);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #0056b3;
+}
+
+.btn-secondary {
+    background: #444;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #555;
+}
+
+/* Sidebar */
+.sidebar {
+    width: var(--sidebar-w);
+    background: #252525;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid #333;
+}
+
+.logo{
+
+    margin-bottom: 30px;
+}
+
+.logo h1{
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--accent);
+}
+
+.target-box {
+    background: #333;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid var(--accent);
+    margin-bottom: 20px;
+}
+
+.target-box strong {
+    display: block;
+    font-size: 1.2rem;
+    margin-top: 5px;
+}
+.playerContainer{
+    display: flex;
+    flex-direction: column;
+}
+.playerCard{
+    background: #333;
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+/* Zone de jeu */
+.game-container {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.game-header {
+    height: 60px;
+    background: #252525;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    font-size: 0.9rem;
+    color: #888;
+}
+
+.wiki-viewport {
+    flex-grow: 1;
+    background: white;
+    margin: 10px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.wiki-viewport iframe {
+    width: 100%;
+    height: 100%;
+}
+
+.timer {
+    margin-top: auto;
+    font-size: 2rem;
+    font-family: monospace;
+    text-align: center;
+    color: var(--accent);
+}
