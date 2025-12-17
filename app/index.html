@@ -7,7 +7,7 @@
     <title>WikiSpeedrun | La Course au Savoir</title>
     <link rel="stylesheet" href="assets/css/style.css">
     <script src="https://cdn.socket.io/4.8.1/socket.io.min.js" integrity="sha384-mkQ3/7FUtcGyoppY6bz/PORYoGqOl7/aSUMn2ymDOJcapfS6PHqxhRTMh1RR0Q6+" crossorigin="anonymous"></script>
-    <script src="assets/js/app.js"></script>
+    <script type="module" src="assets/js/app.js"></script>
 </head>
 
 <body>
@@ -45,7 +45,7 @@
 
         <div class="leaderboard">
             <h3>Joueurs</h3>
-            <div class="playerContainer">
+            <div class="playerContainer" id="playerContainer">
                 <div class="playerCard">
                     <span class="playerName">Alice</span>
                     <span class="playerTime">clicks : 12</span>

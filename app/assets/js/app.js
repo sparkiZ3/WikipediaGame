@@ -1,3 +1,5 @@
+import { Utils } from "./Utils.js";
+
 let currentCode = null;
 
 const socket = io("http://localhost:3000", {
@@ -26,7 +28,6 @@ function submitModal(type){
         socket.emit("createGame",username);
         console.log(username +"is creating a new game");
     }
-    
 }
 
 
@@ -44,3 +45,5 @@ socket.on("updateScores", (scores) => {
     const playerContainer = document.getElementById("playerContainer");
     playerContainer.innerHTML = scores.map(player => Utils.getHTMLPlayerInfos(player)).join("");
 });
+
+window.submitModal = submitModal;
