@@ -17,6 +17,7 @@ function submitModal(type){
 
     if( gameCode.trim() !== "" && type === 'join'){
         console.log(username +"is joining game with code: " + gameCode);
+        socket.emit("joinGame",({ code: gameCode, pseudo: username }));
     }else{
         errorModal.innerHTML += '<p class="error"> Error while joining the game.</p>';
     }

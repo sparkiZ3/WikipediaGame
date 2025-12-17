@@ -38,8 +38,7 @@ io.on("connection", (socket) => {
         console.log("nombre total de parties: ", Object.keys(games).length);
     });
 
-    socket.on("joinGame", ({ code, personal_key }) => {
-        console.log(personal_key)
+    socket.on("joinGame", ({ code,pseudo }) => {
         console.log(`${pseudo} is trying to join game ${code}`);
         if (!games[code]) {
             socket.emit("errorMsg", "❌ Partie introuvable !");
