@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="assets/css/style.css">
     <script src="https://cdn.socket.io/4.8.1/socket.io.min.js" integrity="sha384-mkQ3/7FUtcGyoppY6bz/PORYoGqOl7/aSUMn2ymDOJcapfS6PHqxhRTMh1RR0Q6+" crossorigin="anonymous"></script>
     <script type="module" src="assets/js/app.js"></script>
+    <script src="assets/css/wikiStyle.css"></script>
 </head>
 
 <body>
@@ -45,15 +46,7 @@
 
         <div class="leaderboard">
             <h3>Joueurs</h3>
-            <div class="playerContainer" id="playerContainer">
-                <div class="playerCard">
-                    <span class="playerName">Alice</span>
-                    <span class="playerTime">clicks : 12</span>
-                </div>
-                <div class="playerCard">
-                    <span class="playerName">sparkiZ3</span>
-                    <span class="playerTime">clicks : 12</span>
-                </div>
+            <div class="playerContainer" id="playerContainer">  
             </div>
         </div>
 
@@ -66,7 +59,7 @@
         </header>
 
         <div class="wiki-viewport">
-            <iframe src="https://fr.m.wikipedia.org/wiki/Special:Random" frameborder="0"></iframe>
+            <div id="pageContainer" class="pageContainer"></div>
         </div>
     </main>
 

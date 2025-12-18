@@ -181,7 +181,7 @@ body {
     background: white;
     margin: 10px;
     border-radius: 8px;
-    overflow: hidden;
+    overflow: scroll;
 }
 
 .wiki-viewport iframe {

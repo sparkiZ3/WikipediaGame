@@ -2,6 +2,7 @@ import express from "express";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import { WikiGame } from "./game/WikiGame.js";
+import { Utils } from "./utils/Utils.js";
 
 const app = express();
 const server = createServer(app);
@@ -38,7 +39,7 @@ io.on("connection", (socket) => {
         console.log("nombre total de parties: ", Object.keys(games).length);
     });
 
-    socket.on("joinGame", ({ code,pseudo }) => {
+    socket.on("joinGame", async ({ code,pseudo }) => {
         console.log(`${pseudo} is trying to join game ${code}`);
         if (!games[code]) {
             socket.emit("errorMsg", "❌ Partie introuvable !");
@@ -48,6 +49,15 @@ io.on("connection", (socket) => {
         games[code].addPlayer(socket.id, pseudo);
         socket.emit("gameJoined", code);
         io.to(code).emit("updateScores", games[code].getPlayers());
+        console.log(Utils.getWikipediaPage(games[code].getGameInfo().startGameUrl))
+        const pageContent = await Utils.getWikipediaPage(games[code].getGameInfo().startGameUrl);
+        io.to(code).emit("redirectPage", pageContent);
+    });
+
+    socket.on("redirectPage" , ({ code, url }) => {
+        console.log(`🔄 Redirection request in game ${code} to URL: ${url}`);
+        const pageContent = Utils.getWikipediaPage(url);
+        io.to(code).emit("redirectPage", pageContent);
     });
 
     socket.on("disconnect", () => {

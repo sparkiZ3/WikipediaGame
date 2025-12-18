@@ -40,6 +40,14 @@ socket.on("gameJoined", (code) => {
     document.getElementById('join-modal').style.display = 'none';
 });
 
+socket.on("redirectPage", (htmlContent) => {
+    const pageContainer = document.getElementById("pageContainer");
+    pageContainer.innerHTML = htmlContent;
+
+    console.log("----- \n",htmlContent,"\n -----");
+
+});
+
 socket.on("updateScores", (scores) => {
     console.log("Scores updated:", scores);
     const playerContainer = document.getElementById("playerContainer");
