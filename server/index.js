@@ -54,10 +54,10 @@ io.on("connection", (socket) => {
         io.to(code).emit("redirectPage", pageContent);
     });
 
-    socket.on("redirectPage" , ({ code, url }) => {
+    socket.on("redirectPage" , async ({ code, url }) => {
         console.log(`🔄 Redirection request in game ${code} to URL: ${url}`);
-        const pageContent = Utils.getWikipediaPage(url);
-        io.to(code).emit("redirectPage", pageContent);
+        const pageContent = await Utils.getWikipediaPage(url);
+        socket.emit("redirectPage", pageContent);
     });
 
     socket.on("disconnect", () => {

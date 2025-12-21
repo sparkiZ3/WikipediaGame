@@ -8,6 +8,8 @@ const socket = io("http://localhost:3000", {
     timeout: 5000
 });
 
+
+
 function submitModal(type){
     const errorModal = document.getElementById('errorModal');
     errorModal.innerHTML = '';
@@ -55,3 +57,23 @@ socket.on("updateScores", (scores) => {
 });
 
 window.submitModal = submitModal;
+
+document.addEventListener("click", function (event) {
+    const target = event.target;
+
+    const lien = target.closest("a");
+
+    console.log(lien)
+
+    if (!lien) return; // ce n’est pas un lien → on ignore
+
+    event.preventDefault(); // bloque la navigation si nécessaire
+
+    // Code exécuté pour TOUS les liens
+    const url = new URL(lien.href)
+
+    const finalURL = "https://en.wikipedia.org" + url.pathname
+
+    console.log("redirecting to : ", finalURL)
+    socket.emit("redirectPage",({code : currentCode, url : finalURL}))
+  });
