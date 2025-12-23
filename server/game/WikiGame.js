@@ -9,13 +9,16 @@ export class WikiGame {
         this.initGame();
     }
     async initGame() {
-        this.startGameUrl = await Utils.getRandomWikipediaPage();
+        this.startGamePage = await Utils.getRandomWikipediaPage();
+        this.endGamePage = await Utils.getRandomWikipediaPage();
+        return this;
     }
     getGameInfo() {
         return {
             codeGame: this.codeGame,
             isStarted: this.isStarted,
-            startGameUrl: this.startGameUrl
+            startGamePage: this.startGamePage,
+            endGamePage : this.endGamePage
         };
     }
     addPlayer(id, username) {

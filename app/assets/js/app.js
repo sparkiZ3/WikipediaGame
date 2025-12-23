@@ -17,18 +17,17 @@ function submitModal(type){
     const gameCode = document.getElementById('room-code').value;
     if (username.trim() === "") {
         errorModal.innerHTML += '<p class="error"> Veuillez entrer un pseudo valide.</p>';
+        return
     }
 
-    if( gameCode.trim() !== "" && type === 'join'){
+    if(type === 'join' ){
         console.log(username +"is joining game with code: " + gameCode);
         socket.emit("joinGame",({ code: gameCode, pseudo: username }));
-    }else{
-        errorModal.innerHTML += '<p class="error"> Error while joining the game.</p>';
-    }
-
-    if (type === 'create'){
+    }else if (type === 'create'){
         socket.emit("createGame",username);
         console.log(username +"is creating a new game");
+    }else{
+        errorModal.innerHTML += '<p class="error"> Impossible de créer ou rejoindre une partie.</p>';
     }
 }
 
@@ -45,15 +44,18 @@ socket.on("gameJoined", (code) => {
 socket.on("redirectPage", (htmlContent) => {
     const pageContainer = document.getElementById("pageContainer");
     pageContainer.innerHTML = htmlContent;
-
-    console.log("----- \n",htmlContent,"\n -----");
-
 });
 
 socket.on("updateScores", (scores) => {
     console.log("Scores updated:", scores);
     const playerContainer = document.getElementById("playerContainer");
     playerContainer.innerHTML = scores.map(player => Utils.getHTMLPlayerInfos(player)).join("");
+});
+
+socket.on("initGame", (data) => {
+    const targetPage = document.getElementById("target-page");
+    targetPage.innerText = data.endGamePage.title
+    console.log("init data:", data);
 });
 
 window.submitModal = submitModal;
