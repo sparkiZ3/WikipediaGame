@@ -1,6 +1,7 @@
 import { Utils } from "./Utils.js";
 
 let currentCode = null;
+let currentUsername = null;
 
 const socket = io("http://localhost:3000", {
     reconnectionAttempts: 5,
@@ -18,13 +19,19 @@ function submitModal(type){
     if (username.trim() === "") {
         errorModal.innerHTML += '<p class="error"> Veuillez entrer un pseudo valide.</p>';
         return
+    }else{
+        currentUsername = username
     }
 
     if(type === 'join' ){
         console.log(username +"is joining game with code: " + gameCode);
         socket.emit("joinGame",({ code: gameCode, pseudo: username }));
     }else if (type === 'create'){
+        const loader = document.getElementById("loader")
+        const createButton = document.getElementById("createButton")
         socket.emit("createGame",username);
+        loader.style.display = 'flex';
+        createButton.disabled = true;
         console.log(username +"is creating a new game");
     }else{
         errorModal.innerHTML += '<p class="error"> Impossible de créer ou rejoindre une partie.</p>';
@@ -58,6 +65,10 @@ socket.on("initGame", (data) => {
     console.log("init data:", data);
 });
 
+socket.on("endGame",(winner) => {
+    console.log("game ended. Winner is :", winner)
+});
+
 window.submitModal = submitModal;
 
 document.addEventListener("click", function (event) {
@@ -74,8 +85,8 @@ document.addEventListener("click", function (event) {
     // Code exécuté pour TOUS les liens
     const url = new URL(lien.href)
 
-    const finalURL = "https://en.wikipedia.org" + url.pathname
+    const finalURL = "https://fr.wikipedia.org" + url.pathname
 
     console.log("redirecting to : ", finalURL)
-    socket.emit("redirectPage",({code : currentCode, url : finalURL}))
+    socket.emit("redirectPage",({code : currentCode, url : finalURL, username : currentUsername}))
   });

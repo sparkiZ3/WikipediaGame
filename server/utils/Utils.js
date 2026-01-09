@@ -27,7 +27,7 @@ export class Utils {
 
     }
     static async getRandomWikipediaPage() {
-        const response = await this.fetchWikipedia("https://en.wikipedia.org/api/rest_v1/page/random/summary");
+        const response = await this.fetchWikipedia("https://fr.wikipedia.org/api/rest_v1/page/random/summary");
 
         const data = await response.json();
 
@@ -39,8 +39,13 @@ export class Utils {
         };
     }
     static async getWikipediaPage(url) {
-        console.log("Fetching Wikipedia page:", url);
-        const response = await this.fetchWikipedia(url);
-        return this.formatPage(await response.text());
+        const targetUrl = new URL(url)
+        if (targetUrl.hostname === "fr.wikipedia.org"){
+            console.log("Fetching Wikipedia page:", url);
+            const response = await this.fetchWikipedia(url);
+            return this.formatPage(await response.text());
+        }else{
+            console.log("unauthorized page :",url)
+        }
     }
 }

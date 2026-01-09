@@ -107,6 +107,9 @@ body {
 .btn-secondary {
     background: #444;
     color: white;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
 }
 
 .btn-secondary:hover {
@@ -123,18 +126,18 @@ body {
     border-right: 1px solid #333;
 }
 
-.logo{
+.sidebar .logo{
 
     margin-bottom: 30px;
 }
 
-.logo h1{
+.sidebar .logo h1{
     font-size: 1.5rem;
     font-weight: bold;
     color: var(--accent);
 }
 
-.target-box {
+.sidebar .target-box {
     background: #333;
     padding: 15px;
     border-radius: 8px;
@@ -142,16 +145,16 @@ body {
     margin-bottom: 20px;
 }
 
-.target-box strong {
+.sidebar .target-box strong {
     display: block;
     font-size: 1.2rem;
     margin-top: 5px;
 }
-.playerContainer{
+.sidebar .playerContainer{
     display: flex;
     flex-direction: column;
 }
-.playerCard{
+.sidebar .playerCard{
     background: #333;
     padding: 15px;
     border-radius: 6px;
@@ -178,7 +181,7 @@ body {
 
 .wiki-viewport {
     flex-grow: 1;
-    background: white;
+    background: #252525;
     margin: 10px;
     border-radius: 8px;
     overflow: scroll;
@@ -195,4 +198,41 @@ body {
     font-family: monospace;
     text-align: center;
     color: var(--accent);
+}
+#pageContainer{
+    background-color: #252525;
+}
+
+.loader {
+  width: 20px;
+  height: 20px;
+  border: 5px solid #FFF;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  position: relative;
+  animation: pulse 1s linear infinite;
+}
+.loader:after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 5px solid #FFF;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  animation: scaleUp 1s linear infinite;
+}
+
+@keyframes scaleUp {
+  0% { transform: translate(-50%, -50%) scale(0) }
+  60% , 100% { transform: translate(-50%, -50%)  scale(1)}
+}
+@keyframes pulse {
+  0% , 60% , 100%{ transform:  scale(1) }
+  80% { transform:  scale(1.2)}
 }

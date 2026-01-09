@@ -35,7 +35,6 @@ io.on("connection", (socket) => {
         socket.join(code);
         games[code].addPlayer(socket.id, pseudo);
         socket.emit("gameJoined", code);
-        //io.to(code).emit("updateScores", games[code].players);
         console.log("nombre total de parties: ", Object.keys(games).length);
     });
 
@@ -49,14 +48,15 @@ io.on("connection", (socket) => {
         games[code].addPlayer(socket.id, pseudo);
         socket.emit("gameJoined", code);
         io.to(code).emit("updateScores", games[code].getPlayers());
-        console.log("update data :",games[code].getGameInfo())
         io.to(code).emit("initGame", games[code].getGameInfo());
-        console.log(Utils.getWikipediaPage(games[code].getGameInfo().startGamePage.url))
         const pageContent = await Utils.getWikipediaPage(games[code].getGameInfo().startGamePage.url);
         io.to(code).emit("redirectPage", pageContent);
     });
 
-    socket.on("redirectPage" , async ({ code, url }) => {
+    socket.on("redirectPage" , async ({ code, url, username }) => {
+        if (url === games[code].endGamePage.url){
+            io.to(code).emit("endGame", username);
+        }
         const pageContent = await Utils.getWikipediaPage(url);
         socket.emit("redirectPage", pageContent);
     });
