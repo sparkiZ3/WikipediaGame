@@ -5,17 +5,17 @@ export class Utils {
         const response = await fetch(url);
 
         if (!response.ok) {
-            console,log("status : ",response.status)
-            return renderFetchError(response.status)
+            console.log("status : ",response.status)
+            return this.renderFetchError(response.status)
             //throw new Error(`HTTP error ${response.status}`);
         }
 
         return response;
     }
     static renderFetchError(error){
-        const page = `<div class="mw-page-container">
-    failed to fetch ressource :
-</div>${error}`
+        return `<div class="mw-page-container">
+                    failed to fetch ressource :
+                </div>${error}`
     }
     static formatPage(htmlContent) {
         const $ = cheerio.load(htmlContent);
@@ -39,13 +39,30 @@ export class Utils {
         };
     }
     static async getWikipediaPage(url) {
-        const targetUrl = new URL(url)
-        if (targetUrl.hostname === "fr.wikipedia.org"){
+        if (this.checkDomain(url)){
             console.log("Fetching Wikipedia page:", url);
             const response = await this.fetchWikipedia(url);
-            return this.formatPage(await response.text());
+            if (response.text){
+                return this.formatPage(await response.text());
+            }else{
+                console.log('error while fetching : ',url)
+            }
         }else{
             console.log("unauthorized page :",url)
         }
+    }
+    static async checkDomain(url){
+        const targetUrl = new URL(url)
+        console.log("domain : ", targetUrl.hostname)
+        console.log("path : ", targetUrl.pathname)
+        console.log("isIncluded : ", targetUrl.pathname.includes(":"))
+        if (targetUrl.hostname === "fr.wikipedia.org" &&
+            targetUrl.pathname.startsWith("/wiki/") &&
+            !targetUrl.pathname.includes(":")
+        ){
+            return true
+        }
+        return false
+
     }
 }
