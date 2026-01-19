@@ -49,6 +49,7 @@ export class Utils {
             }
         }else{
             console.log("unauthorized page :",url)
+            return null;
         }
     }
     static async checkDomain(url){

@@ -115,6 +115,50 @@ body {
 .btn-secondary:hover {
     background: #555;
 }
+.startGamePage{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.row{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+.row svg{
+    width: 20px;
+    height: 20px;
+    fill: var(--accent);
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.row svg:active {
+    animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+.startGameButton{
+    padding: 8px 15px;
+    background: var(--accent);
+    border-radius: 8px;
+    color: white;
+    font-weight: bold;
+    margin-top: 30px;
+    cursor: pointer;
+}
 
 /* Sidebar */
 .sidebar {

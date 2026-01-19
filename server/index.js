@@ -14,7 +14,7 @@ const io = new Server(server, {
     }
 });
 
-app.use(express.static("public"));
+app.use(express.static("../app"));
 
 let games = {}; //dict of all Games
 
@@ -36,12 +36,17 @@ io.on("connection", (socket) => {
         games[code].addPlayer(socket.id, pseudo);
         socket.emit("gameJoined", code);
         console.log("nombre total de parties: ", Object.keys(games).length);
+        io.to(code).emit("updateScores", games[code].getPlayers());
+        io.to(code).emit("initGame", games[code].getGameInfo());
     });
 
-    socket.on("joinGame", async ({ code,pseudo }) => {
+    socket.on("joinGame", async ({ code, pseudo }) => {
         console.log(`${pseudo} is trying to join game ${code}`);
         if (!games[code]) {
             socket.emit("errorMsg", "Partie introuvable !");
+            return;
+        } else if (games[code].isStarted) {
+            socket.emit("errorMsg", "La partie a déjà commencé !");
             return;
         }
         socket.join(code);
@@ -49,16 +54,35 @@ io.on("connection", (socket) => {
         socket.emit("gameJoined", code);
         io.to(code).emit("updateScores", games[code].getPlayers());
         io.to(code).emit("initGame", games[code].getGameInfo());
+        //const pageContent = await Utils.getWikipediaPage(games[code].getGameInfo().startGamePage.url);
+        //io.to(code).emit("redirectPage", pageContent);
+    });
+    socket.on("startGame", async ({ code }) => {
+        const game = games[code]
+        game.startGame()
+
         const pageContent = await Utils.getWikipediaPage(games[code].getGameInfo().startGamePage.url);
         io.to(code).emit("redirectPage", pageContent);
     });
-
-    socket.on("redirectPage" , async ({ code, url, username }) => {
-        if (url === games[code].endGamePage.url){
-            io.to(code).emit("endGame", username);
+    socket.on("getNewObjective", async (code) => {
+        const game = games[code]
+        const newObjective = await game.setNewObjective();
+        console.log("new objective set:", newObjective.title)
+        console.log("new objective set:", newObjective.url)
+        io.to(code).emit("getNewObjective", newObjective);
+    });
+    socket.on("redirectPage", async ({ code, url, username }) => {
+        const game = games[code]
+        game.linkClicked(username,url);
+        if (url === games[code].endGamePage.url) {
+            io.to(code).emit("endGame", game.getPlayerInfos(username));
+            return;
         }
         const pageContent = await Utils.getWikipediaPage(url);
-        socket.emit("redirectPage", pageContent);
+        if (pageContent) {
+            socket.emit("redirectPage", pageContent);
+            io.to(code).emit("updateScores", games[code].getPlayers());
+        }
     });
 
     socket.on("disconnect", () => {

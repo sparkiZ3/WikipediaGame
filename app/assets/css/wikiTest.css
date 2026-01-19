@@ -1,6 +1,3 @@
-.vector-column-start{
-  display: none;
-}
-.vector-column-end{
+.vector-column-start,.vector-column-end,.vector-page-toolbar-container{
   display: none;
 }
