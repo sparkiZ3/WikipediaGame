@@ -83,4 +83,11 @@ export class WikiGame {
         }
         return null;
     }
+    isPlayerOwner(username){
+        const player = this.players[username];
+        if (player){
+            return player.isOwner;
+        }
+        return false;
+    }
 }

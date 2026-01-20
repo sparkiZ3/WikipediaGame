@@ -123,6 +123,34 @@ body {
     align-items: center;
     justify-content: center;
 }
+.startGamePage button{
+    margin: 10px;
+    background-color: var(--accent);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    min-width: 150px;
+}
+.startGamePage input{
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #444;
+    background: #1a1a1a;
+    color: white;
+    width: 200px;
+}
+#customObjectiveInput{
+    border-radius: 8px 0px 0px 8px;
+}
+#setCustomObjectiveButton{
+    min-width: auto;
+    margin-left: 0px;
+    border-radius: 0px 8px 8px 0px;
+    border: 1px solid #444;
+}
 .row{
     display: flex;
     flex-direction: row;
@@ -130,15 +158,12 @@ body {
     justify-content: center;
     align-items: center;
 }
-.row svg{
+.animatedLoader{
     width: 20px;
     height: 20px;
     fill: var(--accent);
     margin-left: 10px;
     cursor: pointer;
-}
-
-.row svg:active {
     animation: spin 0.6s linear infinite;
 }
 
@@ -400,4 +425,63 @@ body {
     transform: scale(1.05);
     background: white;
     color: var(--accent);
+}
+
+
+/* LOADING ANIMATION */
+
+@keyframes loadingAnimation {
+    0% {
+        background-position: -100% 0;
+    }
+    100% {
+        background-position: 100% 0;
+    }
+}
+
+.rowLoading{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    padding: 20px 0;
+}
+.loadingContainer {
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - 100px);
+    width: calc(100% - 100px);
+    padding: 50px ;
+}
+.loadingTitle {
+    width: 300px;
+    height: 35px;
+    border-radius: 5px;
+    background: linear-gradient(90deg, #292929 25%, #3a3a3a 50%, #292929 75%);
+    background-size: 200% 100%;
+    animation: loadingAnimation 1.5s infinite linear;
+    margin: 5px 0;
+}
+.columnLoadingText{
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+}
+.loadingText{
+    width: 100%;
+    height: 150px;
+    border-radius: 5px;
+    background: linear-gradient(90deg, #292929 25%, #3a3a3a 50%, #292929 75%);
+    background-size: 200% 100%;
+    animation: loadingAnimation 1.5s infinite linear;
+    margin-bottom: 20px;
+}
+.loadingMenu{
+    width: 36%;
+    margin-left: 4%;
+    height: 650px;
+    border-radius: 5px;
+    background: linear-gradient(90deg, #292929 25%, #3a3a3a 50%, #292929 75%);
+    background-size: 200% 100%;
+    animation: loadingAnimation 1.5s infinite linear;
+
 }

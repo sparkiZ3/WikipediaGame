@@ -64,19 +64,23 @@ io.on("connection", (socket) => {
         const pageContent = await Utils.getWikipediaPage(games[code].getGameInfo().startGamePage.url);
         io.to(code).emit("redirectPage", pageContent);
     });
-    socket.on("getNewObjective", async (code) => {
+    socket.on("getNewObjective", async ({ code, username }) => {
         const game = games[code]
-        const newObjective = await game.setNewObjective();
-        console.log("new objective set:", newObjective.title)
-        console.log("new objective set:", newObjective.url)
-        io.to(code).emit("getNewObjective", newObjective);
+        if (game.isPlayerOwner(username)) {
+            const newObjective = await game.setNewObjective();
+            console.log("new objective set:", newObjective.title)
+            console.log("new objective set:", newObjective.url)
+            io.to(code).emit("getNewObjective", newObjective);
+        }else{
+            socket.emit("errorMsg", "Action non autorisée !");
+        }
     });
     socket.on("redirectPage", async ({ code, url, username }) => {
         const game = games[code]
-        game.linkClicked(username,url);
+        game.linkClicked(username, url);
         if (url === games[code].endGamePage.url) {
             game.endGame();
-            io.to(code).emit("endGame", {winnerData : game.getPlayerInfos(username), gameData : {time: game.getGameDuration()} });
+            io.to(code).emit("endGame", { winnerData: game.getPlayerInfos(username), gameData: { time: game.getGameDuration() } });
             io.to(code).emit("updateScores", games[code].getPlayers());
             return;
         }
