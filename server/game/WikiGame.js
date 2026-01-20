@@ -7,14 +7,18 @@ export class WikiGame {
         this.players = {};
         this.isStarted = false;
         this.initGame();
+        this.startedAt = null;
+        this.finishedAt = null;
     }
     async initGame() {
         this.startGamePage = await Utils.getRandomWikipediaPage();
         //this.endGamePage = await Utils.getRandomWikipediaPage();
         this.endGamePage = {
-            "title":"Pornographie",
-            "url":"https://fr.wikipedia.org/wiki/Pornographie"
+            "title":"France",
+            "url":"https://fr.wikipedia.org/wiki/France"
         };
+        this.startedAt = null;
+        this.finishedAt = null;
         return this;
     }
     getGameInfo() {
@@ -28,10 +32,10 @@ export class WikiGame {
     linkClicked(username, url){
         function formatLink(url){
             const splitURL = url.split("/");
-            const pageName = splitURL[splitURL.length - 1];
+            const pageName = decodeURIComponent(splitURL[splitURL.length - 1]);
             pageName.replace("_", " ");
             return {
-                title: decodeURIComponent(pageName),
+                title: pageName,
                 url: url
             }
         }
@@ -47,8 +51,8 @@ export class WikiGame {
         this.endGamePage = objective;
         return objective;
     }
-    addPlayer(id, username) {
-        const player = new Player(id, username);
+    addPlayer(id, username, isOwner=false) {
+        const player = new Player(id, username, isOwner);
         this.players[username]=player;
     }
     removePlayer(id) {
@@ -67,5 +71,16 @@ export class WikiGame {
     }
     startGame() {
         this.isStarted = true;
+        this.startedAt = new Date();
+    }
+    endGame(){
+        this.isStarted = false;
+        this.finishedAt = new Date();
+    }
+    getGameDuration(){
+        if (this.startedAt && this.finishedAt){
+            return Math.floor((this.finishedAt - this.startedAt)/1000);
+        }
+        return null;
     }
 }

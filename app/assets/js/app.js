@@ -5,7 +5,10 @@ let currentUsername = null;
 
 const disableCTRLF = false
 
-const SERVER = "http://192.168.150.103:3000/"
+const { protocol, hostname, port } = window.location;
+const SERVER = `${protocol}//${hostname}${port ? `:${port}` : ""}`;
+
+console.log("Connecting to server at:", SERVER);
 
 const socket = io(SERVER, {
     reconnectionAttempts: 5,
@@ -13,7 +16,7 @@ const socket = io(SERVER, {
     timeout: 5000
 });
 
-function updateObjectives(newObjective){
+function updateObjectives(newObjective) {
     const targetPage = document.getElementById("target-page");
     const targetPage2 = document.getElementById("target-page2");
     targetPage.innerText = newObjective
@@ -23,7 +26,7 @@ var username = localStorage.getItem("username");
 const usernameContainer = document.getElementById('username');
 usernameContainer.value = username ? username : '';
 
-function submitModal(type){
+function submitModal(type) {
     const errorModal = document.getElementById('errorModal');
     errorModal.innerHTML = '';
     const username = document.getElementById('username').value;
@@ -31,22 +34,22 @@ function submitModal(type){
     if (username.trim() === "") {
         errorModal.innerHTML += '<p class="error"> Veuillez entrer un pseudo valide.</p>';
         return
-    }else{
+    } else {
         currentUsername = username
         localStorage.setItem("username", currentUsername);
     }
 
-    if(type === 'join' ){
-        console.log(username +"is joining game with code: " + gameCode);
-        socket.emit("joinGame",({ code: gameCode, pseudo: username }));
-    }else if (type === 'create'){
+    if (type === 'join') {
+        console.log(username + "is joining game with code: " + gameCode);
+        socket.emit("joinGame", ({ code: gameCode, pseudo: username }));
+    } else if (type === 'create') {
         const loader = document.getElementById("loader")
         const createButton = document.getElementById("createButton")
-        socket.emit("createGame",username);
+        socket.emit("createGame", username);
         loader.style.display = 'flex';
         createButton.disabled = true;
-        console.log(username +"is creating a new game");
-    }else{
+        console.log(username + "is creating a new game");
+    } else {
         errorModal.innerHTML += '<p class="error"> Impossible de créer ou rejoindre une partie.</p>';
     }
 }
@@ -74,21 +77,35 @@ socket.on("updateScores", (scores) => {
 });
 
 socket.on("initGame", (data) => {
+    const pageContainer = document.getElementById("pageContainer");
+    pageContainer.innerHTML = Utils.getStartPageHTML();
     console.log("Updating objectives with:", data.endGamePage.title);
     updateObjectives(data.endGamePage.title);
     console.log("init data:", data);
+
+    const startGameButton = document.getElementById("startGameButton");
+    const refreshObjective = document.getElementById("refreshObjective");
+    startGameButton.addEventListener("click", () => {
+        socket.emit("startGame", ({ code: currentCode }));
+    });
+
+    refreshObjective.addEventListener("click", () => {
+        socket.emit("getNewObjective", currentCode);
+    });
+
 });
 
-socket.on("endGame",(winner) => {
-    console.log("game ended. Winner is :", winner)
+socket.on("endGame", (data) => {
+    const { winnerData, gameData } = data;
+    console.log("game ended. Winner is :", winnerData)
     const pageContainer = document.getElementById("pageContainer");
-    pageContainer.innerHTML = Utils.setWinnerPageHTML(winner);
+    pageContainer.innerHTML = Utils.setWinnerPageHTML(winnerData,gameData);
     const restartButton = document.getElementById("restartButton");
     restartButton.addEventListener("click", () => {
-        window.location.reload();
+        socket.emit("restartGame", currentCode);
     });
 });
-socket.on("getNewObjective",(newObjective) => {
+socket.on("getNewObjective", (newObjective) => {
     console.log("new objective received:", newObjective)
     updateObjectives(newObjective.title);
 });
@@ -113,8 +130,8 @@ document.addEventListener("click", function (event) {
     const finalURL = "https://fr.wikipedia.org" + url.pathname
 
     console.log("redirecting to : ", finalURL)
-    socket.emit("redirectPage",({code : currentCode, url : finalURL, username : currentUsername}))
-  });
+    socket.emit("redirectPage", ({ code: currentCode, url: finalURL, username: currentUsername }))
+});
 
 document.addEventListener("keydown", function (e) {
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "f" && disableCTRLF) {
@@ -122,14 +139,7 @@ document.addEventListener("keydown", function (e) {
     }
 });
 
-const refreshObjective = document.getElementById("refreshObjective");
-const startGameButton = document.getElementById("startGameButton");
 
-refreshObjective.addEventListener("click", () => {
-    socket.emit("getNewObjective", currentCode);
-});
 
-startGameButton.addEventListener("click", () => {
-    socket.emit("startGame",({code : currentCode}));
-});
+
 

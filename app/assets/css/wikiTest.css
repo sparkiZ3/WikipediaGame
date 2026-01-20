@@ -1,3 +1,7 @@
 .vector-column-start,.vector-column-end,.vector-page-toolbar-container{
   display: none;
 }
+
+.mw-page-container-inner{
+  background-color: #252525;
+}

@@ -33,11 +33,11 @@ io.on("connection", (socket) => {
         const code = generateCode();
         games[code] = await new WikiGame(code).initGame();
         socket.join(code);
-        games[code].addPlayer(socket.id, pseudo);
+        games[code].addPlayer(socket.id, pseudo, true);
         socket.emit("gameJoined", code);
         console.log("nombre total de parties: ", Object.keys(games).length);
-        io.to(code).emit("updateScores", games[code].getPlayers());
         io.to(code).emit("initGame", games[code].getGameInfo());
+        io.to(code).emit("updateScores", games[code].getPlayers());
     });
 
     socket.on("joinGame", async ({ code, pseudo }) => {
@@ -75,7 +75,9 @@ io.on("connection", (socket) => {
         const game = games[code]
         game.linkClicked(username,url);
         if (url === games[code].endGamePage.url) {
-            io.to(code).emit("endGame", game.getPlayerInfos(username));
+            game.endGame();
+            io.to(code).emit("endGame", {winnerData : game.getPlayerInfos(username), gameData : {time: game.getGameDuration()} });
+            io.to(code).emit("updateScores", games[code].getPlayers());
             return;
         }
         const pageContent = await Utils.getWikipediaPage(url);
@@ -84,7 +86,11 @@ io.on("connection", (socket) => {
             io.to(code).emit("updateScores", games[code].getPlayers());
         }
     });
-
+    socket.on("restartGame", async (code) => {
+        const game = games[code]
+        await game.initGame();
+        io.to(code).emit("initGame", games[code].getGameInfo());
+    });
     socket.on("disconnect", () => {
         console.log("🔴 Player disconnected :", socket.id);
         for (const code in games) {

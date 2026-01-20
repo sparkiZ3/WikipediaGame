@@ -206,6 +206,21 @@ body {
     display: flex;
     justify-content: space-between;
 }
+.playerClicks{
+    width: fit-content;
+}
+.playerNameContainer{
+    display: flex;
+    justify-content: left;
+    width: fit-content;
+}
+#ownerSVG{
+    width: 16px;
+    height: 16px;
+    fill: #ffd700;
+    margin-right: 6px;
+    margin-left: 0px;
+}
 /* Zone de jeu */
 .game-container {
     flex-grow: 1;
@@ -244,7 +259,17 @@ body {
     color: var(--accent);
 }
 #pageContainer{
-    background-color: #252525;
+    display: flex;
+    background: linear-gradient(-45deg, #021931, #1a1a1a);
+    width: 100%;
+    height: 100%;   
+    justify-content: center;
+}
+#pageContainer .winner-page h1{
+    color: var(--accent);
+    margin-top: 20px;
+    font-size: 3rem;
+    font-weight: bold;
 }
 
 .loader {
@@ -279,4 +304,100 @@ body {
 @keyframes pulse {
   0% , 60% , 100%{ transform:  scale(1) }
   80% { transform:  scale(1.2)}
+}
+.winner-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100%;
+    width: 100%;
+    padding: 2rem;
+    box-sizing: border-box;
+    
+    /* 2. CONFIGURATION DU DEGRADÉ ANIME */
+    /* On crée un dégradé très large (400%) pour pouvoir le déplacer */
+    
+    
+    font-family: 'Segoe UI', sans-serif;
+    color: var(--text-light);
+}
+
+/* 3. EFFET DE FLOU POUR RENDRE LE TOUT PLUS DOUX (Optionnel) */
+.winner-page::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.2); /* Assombrit légèrement pour la lisibilité */
+    z-index: 0;
+}
+
+/* On s'assure que le contenu passe au-dessus du pseudo-élément ::before */
+.winner-page > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* --- Le reste du code reste identique à ma réponse précédente --- */
+
+.winner-page h1 {
+    font-size: 3.5rem;
+    margin-bottom: 0.5rem;
+    color: white;
+    text-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+.winner-page .statDiv{
+    padding: 10px 20px;
+    background-color: var(--accent);
+    font-weight: bold;
+    margin: 5px 10px;
+    border-radius: 10px;
+    color: white;
+    border: #87acd3 2px solid;
+    min-width: 120px;
+    text-align: center;
+}
+
+.winner-page ul {
+    list-style: none;
+    padding: 0;
+    margin: 1.5rem 0;
+    width: 100%;
+    max-width: 600px;
+    max-height: 40vh;
+    overflow-y: auto;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px); /* Effet de vitre fumée */
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.winner-page li {
+    padding: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.winner-page li a {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+#restartButton {
+    margin-top: 2rem;
+    padding: 15px 40px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: white;
+    background: var(--accent);
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    transition: 0.3s;
+}
+
+#restartButton:hover {
+    transform: scale(1.05);
+    background: white;
+    color: var(--accent);
 }
