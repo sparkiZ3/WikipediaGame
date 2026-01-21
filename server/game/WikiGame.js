@@ -19,6 +19,7 @@ export class WikiGame {
         };
         this.startedAt = null;
         this.finishedAt = null;
+        Object.values(this.players).forEach(p => p.resetPlayer());
         return this;
     }
     getGameInfo() {
@@ -26,7 +27,8 @@ export class WikiGame {
             codeGame: this.codeGame,
             isStarted: this.isStarted,
             startGamePage: this.startGamePage,
-            endGamePage : this.endGamePage
+            endGamePage : this.endGamePage,
+            owner : Object.values(this.players).find(p => p.isOwner)?.username || null
         };
     }
     linkClicked(username, url){
@@ -52,8 +54,13 @@ export class WikiGame {
         return objective;
     }
     addPlayer(id, username, isOwner=false) {
-        const player = new Player(id, username, isOwner);
-        this.players[username]=player;
+        if (!this.players[username]){
+            const player = new Player(id, username, isOwner);
+            this.players[username]=player;
+        }else{
+            console.log(`Player with username ${username} already exists in the game.`);
+            throw new Error("Username already taken in this game.");
+        }
     }
     removePlayer(id) {
         for (const username in this.players) {

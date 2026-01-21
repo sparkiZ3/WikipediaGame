@@ -4,12 +4,13 @@ export class Utils {
         playerList.innerHTML = scores.map(player => Utils.getHTMLPlayerInfos(player)).join("");
     }
 
-    static getStartPageHTML() {
+    static getStartPageHTML(isOwner=false) {
+        if (isOwner){
         return `
         <div class="startGamePage">
             <h1>Bienvenue !</h1>
                 <div class="row">
-                    <p>Votre objectif : <strong id="target-page2">Pipit de Sibérie</strong></p>
+                    <p>Votre objectif : <a class="ignoreLinkRestriction" id="target-page2">Pipit de Sibérie</a></p>
                 </div>
                 <h2>Nouvel objectif :</h2>
                 <div class="row">
@@ -27,6 +28,16 @@ export class Utils {
                     <p>Commencer la partie !</p>
                 </div>
             </div>`
+        }else{
+            return `
+            <div class="startGamePage">
+                <h1>Bienvenue !</h1>
+                    <div class="row">
+                        <p>Votre objectif : <strong id="target-page2">Pipit de Sibérie</strong></p>
+                    </div>
+                    <h2>En attente du lancement de la partie...</h2>
+                </div>`
+        }
     }
 
     static getHTMLPlayerInfos(player) {
@@ -41,6 +52,11 @@ export class Utils {
         `;
     }
     static setWinnerPageHTML(winner, gameData) {
+        if(gameData.time > 60){
+            gameData.time = (gameData.time / 60).toFixed(2) + " minutes et " + (gameData.time % 60) + " secondes"
+        }else{
+            gameData.time = gameData.time + " secondes"
+        }
         return `
         <div class="winner-page">
             <h1>${winner.username} à gagné la partie !</h1>
@@ -49,12 +65,12 @@ export class Utils {
                     <p> ${winner.clicks} clicks</p>
                 </div>
                 <div class="statDiv">
-                    <p> ${gameData.time} secondes</p>
+                    <p> ${gameData.time}</p>
                 </div>
             </div>
             <h2>Historique des pages visitées :</h2>
             <ul>
-                ${winner.history.map(page => `<li><a href="${page.url}" target="_blank">${page.title}</a></li>`).join("")}
+                ${winner.history.map(page => `<li><a href="${page.url}" class="ignoreLinkRestriction">${page.title}</a></li>`).join("")}
             </ul>
             <button id="restartButton">Rejouer</button>
         </div>

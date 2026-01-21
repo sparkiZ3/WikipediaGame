@@ -41,6 +41,7 @@ io.on("connection", (socket) => {
     });
 
     socket.on("joinGame", async ({ code, pseudo }) => {
+        code = code.toUpperCase();
         console.log(`${pseudo} is trying to join game ${code}`);
         if (!games[code]) {
             socket.emit("errorMsg", "Partie introuvable !");
@@ -50,10 +51,16 @@ io.on("connection", (socket) => {
             return;
         }
         socket.join(code);
-        games[code].addPlayer(socket.id, pseudo);
-        socket.emit("gameJoined", code);
-        io.to(code).emit("updateScores", games[code].getPlayers());
-        io.to(code).emit("initGame", games[code].getGameInfo());
+        // add player to the game
+        try {
+            games[code].addPlayer(socket.id, pseudo);
+            socket.emit("gameJoined", code);
+            io.to(code).emit("updateScores", games[code].getPlayers());
+            io.to(code).emit("initGame", games[code].getGameInfo());
+        } catch (e) {
+            socket.emit("errorMsg", "Ce pseudo est déjà pris dans cette partie !");
+            return;
+        }
         //const pageContent = await Utils.getWikipediaPage(games[code].getGameInfo().startGamePage.url);
         //io.to(code).emit("redirectPage", pageContent);
     });
@@ -71,7 +78,7 @@ io.on("connection", (socket) => {
             console.log("new objective set:", newObjective.title)
             console.log("new objective set:", newObjective.url)
             io.to(code).emit("getNewObjective", newObjective);
-        }else{
+        } else {
             socket.emit("errorMsg", "Action non autorisée !");
         }
     });
@@ -85,7 +92,7 @@ io.on("connection", (socket) => {
             return;
         }
         const pageContent = await Utils.getWikipediaPage(url);
-        if (pageContent) {
+        if (pageContent && game.isStarted) {
             socket.emit("redirectPage", pageContent);
             io.to(code).emit("updateScores", games[code].getPlayers());
         }

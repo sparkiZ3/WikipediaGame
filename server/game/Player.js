@@ -15,4 +15,8 @@ export class Player {
             isOwner: this.isOwner
         };
     }
+    resetPlayer() {
+        this.clicks = 0;
+        this.history = [];
+    }
 }
