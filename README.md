@@ -1,9 +1,8 @@
 # WikipediaGame
 
-WikipediaGame est un jeu sur le naviguateur inspirée du jeu de la *course Wikipédia* mais avec un systeme de partie permettant le multijoueur de maniere plus simplifiée.
+WikipediaGame est un jeu sur le naviguateur inspirée du jeu de la *course Wikipédia* mais avec un systeme de parties permettant le multijoueur de maniere plus simplifiée.
 
 Le principe est simple : partir d’une page Wikipédia aléatoire et atteindre une autre page cible, elle aussi aléatoire, **en naviguant uniquement via les liens présents dans les pages**.  
-Pas de recherche, pas d’URL tapée à la main. Juste du clic, du cerveau, et un peu de chance.
 
 ---
 
@@ -14,11 +13,9 @@ Pas de recherche, pas d’URL tapée à la main. Juste du clic, du cerveau, et u
 - Le joueur doit atteindre la page cible **uniquement en utilisant les liens (`<a href>`) présents dans les articles**
 - Le but est d’y arriver en un minimum d’étapes
 
----
-
 ## Installation et lancement
 
-Le projet peut etre lancer via docker ou avec nodeJS.
+Le projet peut etre lancé via docker ou avec nodeJS.
 
 ## Docker
 
