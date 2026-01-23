@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fr" class="client-js vector-feature-language-in-header-enabled vector-feature-language-in-main-page-header-disabled vector-feature-page-tools-pinned-disabled vector-feature-toc-pinned-clientpref-1 vector-feature-main-menu-pinned-disabled vector-feature-limited-width-clientpref-1 vector-feature-limited-width-content-enabled vector-feature-custom-font-size-clientpref-1 vector-feature-appearance-pinned-clientpref-1 skin-theme-clientpref-night vector-toc-available vector-animations-ready ve-available">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WikipediaGame</title>
+    <script src="https://cdn.socket.io/4.8.1/socket.io.min.js" integrity="sha384-mkQ3/7FUtcGyoppY6bz/PORYoGqOl7/aSUMn2ymDOJcapfS6PHqxhRTMh1RR0Q6+" crossorigin="anonymous"></script>
+    <script type="module" src="assets/js/app.js" defer></script>
+    <link rel="stylesheet"
+        href="https://fr.wikipedia.org/w/load.php?lang=fr&modules=ext.cite.styles|ext.kartographer.style|ext.uls.interlanguage|ext.visualEditor.desktopArticleTarget.noscript|ext.wikimediamessages.styles|skins.vector.icons,styles|skins.vector.search.codex.styles|wikibase.client.init&only=styles&skin=vector-2022">
+    <link rel="stylesheet"
+        href="https://fr.wikipedia.org/w/load.php?lang=fr&modules=site.styles&only=styles&skin=vector-2022">
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <link rel="stylesheet" href="./assets/css/wikiTest.css">
+</head>
+
+<body>
+    <div id="join-modal" class="modal-overlay">
+        <div class="modal-card">
+            <h2>Rejoindre une partie !</h2>
+            <p>et zé parti.</p>
+
+            <div id="errorModal"></div>
+
+            <div class="input-group">
+                <input type="text" id="username" placeholder="Pseudo " autocomplete="off">
+            </div>
+
+            <div class="input-group">
+                <input type="text" id="room-code" placeholder="Code de la salle (Optionnel)">
+            </div>
+
+            <div class="modal-actions">
+                <button id="createButton" class="btn btn-secondary" onclick="submitModal('create')">Créer une partie <span style="display: none;" id="loader" class="loader"></span></button>
+                <button class="btn btn-primary" onclick="submitModal('join')">Rejoindre</button>
+            </div>
+            <br>    
+            
+        </div>
+    </div>
+    <aside class="sidebar">
+        <div class="logo">
+            <h1>WikipediaGame</h1>
+            <p id="room"></p>
+        </div>
+
+        <div class="target-box">
+            <span>Objectif :</span>
+            <strong id="target-page"></strong>
+        </div>
+
+        <div class="leaderboard">
+            <h3>Joueurs</h3>
+            <div class="playerContainer" id="playerContainer">  
+            </div>
+        </div>
+
+        <div class="timer">By sparkiZ3</div>
+    </aside>
+
+    <main class="game-container">
+        <header class="game-header">
+            <div class="breadcrumb">Départ : Albert Einstein > ... > Page Actuelle</div>
+        </header>
+
+        <div class="wiki-viewport">
+            <span id="pageLoader" style="display: none;"></span>
+            <div id="pageContainer" class="pageContainer">
+                
+            </div>
+        </div>
+    </main>
+
+</body>
+
+</html>

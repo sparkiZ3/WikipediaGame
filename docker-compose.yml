@@ -1,12 +1,11 @@
 version: "3.9"
 
 services:
-  node:
-    container_name: node_app
+  app:
     build: .
+    container_name: wikipedia_game
     ports:
       - "3000:3000"
-    volumes:
-      - .:/app
-      - /app/node_modules
-    command: npm run dev
+    dns:
+    - 8.8.8.8
+    - 1.1.1.1

@@ -1,10 +1,16 @@
 FROM node:20-alpine
 
-WORKDIR /app
+WORKDIR /app/game
 
-COPY package*.json ./
+
+COPY game/package*.json ./
+
 RUN npm install
 
-COPY . .
+COPY game .
 
 EXPOSE 3000
+
+ENV NODE_OPTIONS="--dns-result-order=ipv4first"
+
+CMD ["npm", "start"]

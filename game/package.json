@@ -1,0 +1,19 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "sparkiZ3",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "debug": "NODE_OPTIONS=--dns-result-order=ipv4first node index.js"
+  },
+  "dependencies": {
+    "cheerio": "^1.1.2",
+    "express": "^5.2.1",
+    "node-fetch": "^3.3.2",
+    "socket.io": "^4.8.1"
+  }
+}
