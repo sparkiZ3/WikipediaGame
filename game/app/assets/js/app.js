@@ -124,7 +124,6 @@ socket.on("updateScores", (scores) => {
 socket.on("redirectPage", (htmlContent) => {
     const pageContainer = document.getElementById("pageContainer");
     pageContainer.innerHTML = htmlContent;
-    pageContainer.scrollTo(0, 0);
     setLoadingPageState(false);
 });
 
@@ -157,7 +156,7 @@ window.submitModal = submitModal;
 
 //handle link clicks in wikipedia content
 document.addEventListener("click", function (event) {
-    const pageContainer = document.getElementById("pageContainer");
+    const wiki_viewport = document.querySelector(".wiki-viewport");
     const target = event.target;
 
     const lien = target.closest("a");
@@ -171,6 +170,8 @@ document.addEventListener("click", function (event) {
         window.open(lien.href, '_blank');
         return;
     }
+    wiki_viewport.scrollTo(0, 0);
+
 
     //build url and emit redirectPage event
     const url = new URL(lien.href)
