@@ -98,6 +98,9 @@ socket.on("initGame", (data) => {
     //start game button listener
     const startGameButton = document.getElementById("startGameButton");
     const refreshRandomObjectiveButton = document.getElementById("refreshRandomObjectiveButton");
+
+    const setCustomObjectiveButton = document.getElementById("setCustomObjectiveButton");
+    const customObjectiveInput = document.getElementById("customObjectiveInput");
     startGameButton.addEventListener("click", () => {
         socket.emit("startGame", ({ code: currentCode }));
     });
@@ -111,6 +114,7 @@ socket.on("initGame", (data) => {
         updateObjectives({title :"IsL0ading..."});
         socket.emit("getNewObjective", ({code : currentCode,username : currentUsername}));
     });
+    
 });
 
 //update players scores on updateScores event
