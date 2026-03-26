@@ -80,6 +80,7 @@ export class WikiGame {
     startGame() {
         this.isStarted = true;
         this.startedAt = new Date();
+        console.log(`Game ${this.codeGame} started with objective :${this.endGamePage.url}`);
     }
     endGame(){
         this.isStarted = false;

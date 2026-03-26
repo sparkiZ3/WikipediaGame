@@ -7,12 +7,7 @@ import { Utils } from "./src/utils/Utils.js";
 const app = express();
 const server = createServer(app);
 
-const io = new Server(server, {
-    cors: {
-        origin: "*",
-        methods: ["GET", "POST"]
-    }
-});
+const io = new Server(server);
 
 app.use(express.static("./app"));
 
@@ -20,13 +15,19 @@ let games = {}; //dict of all Games
 
 function generateCode() {
     const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    let code = "";
-    for (let i = 0; i < 4; i++) code += letters[Math.floor(Math.random() * letters.length)];
+    let code;
+    do {
+        code = "";
+        for (let i = 0; i < 4; i++) {
+            code += letters[Math.floor(Math.random() * letters.length)];
+        }
+    } while (games[code]); // Check if code already exists
+
     return code;
 }
 
 io.on("connection", (socket) => {
-    console.log("🟢 Nouveau joueur :", socket.id);
+    console.log("[+] Nouveau joueur :", socket.id);
 
     socket.on("createGame", async (pseudo) => {
         console.log(`${pseudo} is creating a new game`);
@@ -35,7 +36,7 @@ io.on("connection", (socket) => {
         socket.join(code);
         games[code].addPlayer(socket.id, pseudo, true);
         socket.emit("gameJoined", code);
-        console.log("nombre total de parties: ", Object.keys(games).length);
+        console.log(`Partie ${code} créée. Total : ${Object.keys(games).length}`);
         io.to(code).emit("initGame", games[code].getGameInfo());
         io.to(code).emit("updateScores", games[code].getPlayers());
     });
@@ -65,18 +66,18 @@ io.on("connection", (socket) => {
         //io.to(code).emit("redirectPage", pageContent);
     });
     socket.on("startGame", async ({ code }) => {
-        const game = games[code]
-        game.startGame()
+        if (games[code] && !games[code].isStarted) { 
+            const game = games[code]
+            game.startGame()
 
-        const pageContent = await Utils.getWikipediaPage(games[code].getGameInfo().startGamePage.url);
-        io.to(code).emit("redirectPage", pageContent);
+            const pageContent = await Utils.getWikipediaPage(games[code].getGameInfo().startGamePage.url);
+            io.to(code).emit("redirectPage", pageContent);
+        }
     });
     socket.on("getNewObjective", async ({ code, username }) => {
         const game = games[code]
         if (game.isPlayerOwner(username)) {
             const newObjective = await game.setNewObjective();
-            console.log("new objective set:", newObjective.title)
-            console.log("new objective set:", newObjective.url)
             io.to(code).emit("getNewObjective", newObjective);
         } else {
             socket.emit("errorMsg", "Action non autorisée !");
@@ -103,7 +104,7 @@ io.on("connection", (socket) => {
         io.to(code).emit("initGame", games[code].getGameInfo());
     });
     socket.on("disconnect", () => {
-        console.log("🔴 Player disconnected :", socket.id);
+        console.log("[-] Player disconnected :", socket.id);
         for (const code in games) {
             games[code].removePlayer(socket.id);
             io.to(code).emit("updateScores", games[code].getPlayers());

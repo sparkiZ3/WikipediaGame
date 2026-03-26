@@ -3,8 +3,7 @@ import * as cheerio from "cheerio";
 export class Utils {
     static async fetchWikipedia(url) {
         try{
-            const response = await fetch(url);
-            return response;
+            return await fetch(url);
         }catch(e){
             console.log("Failed to get wikipedia page :", e)
             return this.renderFetchError(e.message)
@@ -27,13 +26,16 @@ export class Utils {
     static async getRandomWikipediaPage() {
         const response = await this.fetchWikipedia("https://fr.wikipedia.org/api/rest_v1/page/random/summary");
 
+        console.log(response.status)
+
         const data = await response.json();
 
         const title = data.titles.normalized
-        const URL=data.content_urls.desktop.page
+        const url=data.content_urls.desktop.page
+        const reformattedURL = url.replace(/'/g, "%27")
         return {
             "title":title,
-            "url":URL
+            "url": reformattedURL
         };
     }
     static async getWikipediaPage(url) {
