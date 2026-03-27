@@ -3,6 +3,7 @@ import { createServer } from "http";
 import { Server } from "socket.io";
 import { WikiGame } from "./src/game/WikiGame.js";
 import { Utils } from "./src/utils/Utils.js";
+import { exec } from "child_process";
 
 const app = express();
 const server = createServer(app);
@@ -12,6 +13,7 @@ const io = new Server(server);
 app.use(express.static("./app"));
 
 let games = {}; //dict of all Games
+let players = {}
 
 function generateCode() {
     const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -25,11 +27,15 @@ function generateCode() {
 
     return code;
 }
+function usernameAndIdMatching(username, id){
+    return players[username] === id
+}
 
 io.on("connection", (socket) => {
     console.log("[+] Nouveau joueur :", socket.id);
 
     socket.on("createGame", async (pseudo) => {
+        players[pseudo] = socket.id
         console.log(`${pseudo} is creating a new game`);
         const code = generateCode();
         games[code] = await new WikiGame(code).initGame();
@@ -76,9 +82,22 @@ io.on("connection", (socket) => {
     });
     socket.on("getNewObjective", async ({ code, username }) => {
         const game = games[code]
-        if (game.isPlayerOwner(username)) {
+        if (game.isPlayerOwner(username) && usernameAndIdMatching(username, socket.id)) {
             const newObjective = await game.setNewObjective();
             io.to(code).emit("getNewObjective", newObjective);
+        } else {
+            socket.emit("errorMsg", "Action non autorisée !");
+        }
+    });
+    socket.on("setCustomObjective", async ({ code, username, url }) => {
+        const game = games[code]
+        if (game.isPlayerOwner(username) && usernameAndIdMatching(username, socket.id)) {
+            try{
+                const newObjective = await game.setCustomObjective(url);
+                io.to(code).emit("getNewObjective", newObjective);
+            }catch(e){
+                console.log(`Failed to set custom objective : ${e.message}`)
+            }
         } else {
             socket.emit("errorMsg", "Action non autorisée !");
         }

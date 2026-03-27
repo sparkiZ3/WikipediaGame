@@ -20,7 +20,7 @@ export class Utils {
                 
                 <p>Custom page :</p>
                 <div class="row">
-                    <input type="text" id="customObjectiveInput" placeholder="ex : https://fr.wikipedia.org/wiki/..."/>
+                    <input type="text" id="customObjectiveInput" placeholder="https://fr.wikipedia.org/wiki/..."/>
                     <button id="setCustomObjectiveButton" class="setCustomObjectiveButton">-></button>
                 </div>
                 

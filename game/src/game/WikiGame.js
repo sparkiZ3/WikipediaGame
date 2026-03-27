@@ -54,6 +54,17 @@ export class WikiGame {
         this.endGamePage = objective;
         return objective;
     }
+    async setCustomObjective(url){
+        if (Utils.checkDomain(url)){
+            const slug = url.split("/").pop()
+            const objective = await Utils.getWikipediaPageDataSummary(slug)
+            this.endGamePage= objective
+            console.log(objective)
+            return objective
+        }else{
+            throw new Error(`url invalide ${url}`)
+        }
+    }
     addPlayer(id, username, isOwner=false) {
         if (!this.players[username]){
             const player = new Player(id, username, isOwner);

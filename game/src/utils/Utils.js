@@ -24,20 +24,57 @@ export class Utils {
 
     }
     static async getRandomWikipediaPage() {
-        const response = await this.fetchWikipedia("https://fr.wikipedia.org/api/rest_v1/page/random/summary");
+        try {
+            const response = await this.fetchWikipedia("https://fr.wikipedia.org/api/rest_v1/page/random/summary");
 
-        console.log(response.status)
+            if (!response.ok) {
+                throw new Error(`HTTP error while fetching random page: ${response.status}`);
+            }
 
-        const data = await response.json();
+            const data = await response.json();
 
-        const title = data.titles.normalized
-        const url=data.content_urls.desktop.page
-        const reformattedURL = url.replace(/'/g, "%27")
-        return {
-            "title":title,
-            "url": reformattedURL
-        };
+            const title = data?.titles?.normalized ?? "Titre inconnu";
+            const url = data?.content_urls?.desktop?.page ?? "";
+
+            const reformattedURL = url.replace(/'/g, "%27");
+
+            return {
+                title,
+                url: reformattedURL
+            };
+
+        } catch (error) {
+            console.error("Erreur lors de la récupération de la page Wikipedia :", error);
+            return null;
+        }
     }
+    static async getWikipediaPageDataSummary(slug) {
+        const fullUrl = "https://fr.wikipedia.org/api/rest_v1/page/summary/"+slug
+        try {
+            const response = await fetch(fullUrl);
+
+            if (!response.ok) {
+                throw new Error(`HTTP error while fetching random page: ${response.status}`);
+            }
+
+            const data = await response.json();
+
+            const title = data?.titles?.normalized ?? "Titre inconnu";
+            const url = data?.content_urls?.desktop?.page ?? "";
+
+            const reformattedURL = url.replace(/'/g, "%27");
+
+            return {
+                title,
+                url: reformattedURL
+            };
+
+        } catch (error) {
+            console.error("Erreur lors de la récupération des données de la page :", error);
+            return null;
+        }
+    }
+
     static async getWikipediaPage(url) {
         if (this.checkDomain(url)){
             console.log("Fetching Wikipedia page:", url);
@@ -52,18 +89,11 @@ export class Utils {
             return null;
         }
     }
-    static async checkDomain(url){
+    static checkDomain(url){
+        console.log("checking domain :"+url)
         const targetUrl = new URL(url)
         console.log("domain : ", targetUrl.hostname)
         console.log("path : ", targetUrl.pathname)
-        console.log("isIncluded : ", targetUrl.pathname.includes(":"))
-        if (targetUrl.hostname === "fr.wikipedia.org" &&
-            targetUrl.pathname.startsWith("/wiki/") &&
-            !targetUrl.pathname.includes(":")
-        ){
-            return true
-        }
-        return false
-
+        return targetUrl.hostname === "fr.wikipedia.org" && targetUrl.pathname.startsWith("/wiki/")
     }
 }

@@ -114,7 +114,16 @@ socket.on("initGame", (data) => {
         updateObjectives({title :"IsL0ading..."});
         socket.emit("getNewObjective", ({code : currentCode,username : currentUsername}));
     });
-    
+
+    setCustomObjectiveButton.addEventListener("click", () => {
+        if (isNewObjectiveLoading) {
+            console.log("already loading new objective");
+            return;
+        };
+        isNewObjectiveLoading = true;
+        updateObjectives({title :"IsL0ading..."});
+        socket.emit("setCustomObjective", ({code : currentCode,username : currentUsername, url : customObjectiveInput.value}))
+    });
 });
 
 //update players scores on updateScores event
